@@ -1,8 +1,10 @@
 package client.view;
 
+import client.model.Client;
+
 import javax.swing.*;
-import java.awt.*;
-import java.util.logging.XMLFormatter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class LoginView extends JFrame {
     private JPanel mainFrame;
@@ -18,6 +20,30 @@ public class LoginView extends JFrame {
         this.setContentPane(this.mainFrame);
         this.setLocationRelativeTo(null);
         this.pack();
+        this.atachlisteners();
+
+    }
+
+    public void clearInputs() {
+
+    }
+
+    private void atachlisteners() {
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Client c = new Client(username.getText());
+                c.connect(host.getText(), Integer.parseInt(port.getText()));
+            }
+        });
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                username.setText("");
+                port.setText("");
+                host.setText("");
+            }
+        });
     }
 
 }
