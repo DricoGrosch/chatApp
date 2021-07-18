@@ -13,7 +13,7 @@ public class Peer {
     String host;
     int port;
     Gson gson = new Gson();
-
+    ServerThreadBuffer buffer = ServerThreadBuffer.getInstance();
 
     public Peer() throws IOException {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
@@ -24,6 +24,7 @@ public class Peer {
         System.out.println("port");
         this.port = Integer.parseInt(this.reader.readLine());
         ServerThread serverThread = new ServerThread(port);
+        this.buffer.addThread(serverThread);
         serverThread.start();
         Socket socket = null;
         try {
@@ -40,9 +41,6 @@ public class Peer {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        new Peer();
-    }
 
     public void communicate(ServerThread serverThread) {
         try {

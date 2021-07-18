@@ -1,34 +1,44 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 public class ServerThread extends Thread {
     private ServerSocket serverSocket;
-    private Set<ServerThreadThread> serverThreadThreads = new HashSet<>();
+    private PrintWriter writer;
+    ServerThreadBuffer buffer;
 
     public ServerThread(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
     }
 
-    public Set<ServerThreadThread> getServerThreadThreads() {
-        return serverThreadThreads;
-    }
-
     @Override
     public void run() {
         try {
-            ServerThreadThread serverThreadThread = new ServerThreadThread(this, this.serverSocket.accept());
-            this.serverThreadThreads.add(serverThreadThread);
-            serverThreadThread.start();
-        } catch (Exception e) {
+            Socket s = this.serverSocket.accept();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            this.writer = new PrintWriter(s.getOutputStream(), true);
+            while (true) {
+                this.sendMessage(reader.readLine());
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void sendMessage(String message) {
         try {
-            this.serverThreadThreads.forEach(t -> t.getWriter().println(message));
+            ArrayList<ServerThread> a = this.buffer.getInstance().getThreads();
+            for (ServerThread t : a) {
+//                if (t.hashCode() != this.hashCode()) {
+                    t.writer.println(message);
+//                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
