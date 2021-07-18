@@ -23,16 +23,7 @@ public class ClientHandler implements Runnable {
         try {
             while (true) {
                 String request = this.in.readLine();
-                if (request.contains("name")) {
-                    out.println("Hello " + client.getLocalAddress().getHostName());
-                } else if (request.startsWith("say")) {
-                    int firstSpace = request.indexOf(" ");
-                    if (firstSpace != -1) {
-                        outToAll(request.substring(firstSpace + 1));
-                    }
-                } else {
-                    out.println("Type 'name' to get your local ip");
-                }
+                outToAll(request);
             }
         } catch (IOException e) {
             e.printStackTrace();

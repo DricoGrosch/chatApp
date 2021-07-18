@@ -13,7 +13,6 @@ public class Server {
     public static void main(String[] args) throws IOException {
         ServerSocket listener = new ServerSocket(PORT);
         while (true) {
-
             System.out.println("[SERVER] is waiting for client connection");
             Socket client = listener.accept();
             System.out.println("[SERVER] Connected with " + client.getLocalAddress().getHostName());
