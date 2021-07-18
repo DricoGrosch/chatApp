@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
+
 public class ClientHandler implements Runnable {
     private Socket client;
     private BufferedReader in;
@@ -22,8 +23,9 @@ public class ClientHandler implements Runnable {
     public void run() {
         try {
             while (true) {
-                String request = this.in.readLine();
-                outToAll(request);
+//                recebe a mensagem do cliente e manda para todos os clientes da lista
+                String clientMessage = this.in.readLine();
+                outToAll(clientMessage);
             }
         } catch (IOException e) {
             e.printStackTrace();

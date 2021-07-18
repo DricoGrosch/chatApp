@@ -16,12 +16,13 @@ public class ServerConnection extends Thread {
     public void run() {
         try {
             while (true) {
+//               fica esperando uma responta do servidor para poder printar na tela
                 String serverResponse = null;
                 serverResponse = this.in.readLine();
                 if (serverResponse == null) {
                     break;
                 }
-                System.out.println("Server says: " + serverResponse);
+                System.out.println(serverResponse);
             }
         } catch (IOException e) {
             e.printStackTrace();
