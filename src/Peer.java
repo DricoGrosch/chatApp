@@ -25,19 +25,17 @@ public class Peer {
         this.port = Integer.parseInt(this.reader.readLine());
         ServerThread serverThread = new ServerThread(port);
         serverThread.start();
-//        nessa parte aqui, precisa de um for. alguma classe tem que saber todo mundo que ta conectado
-        for (int i = 5000; i < 5002; i++) {
-            Socket socket=null;
-            try {
-                socket = new Socket(this.host, i);
-                new PeerThread(socket).start();
-                this.communicate(serverThread);
-            } catch (Exception e) {
-                if (socket != null) {
-                    socket.close();
-                } else {
-                    System.out.println("Failed");
-                }
+        Socket socket = null;
+        try {
+            System.out.println("port to receive");
+            socket = new Socket(this.host, Integer.parseInt(this.reader.readLine()));
+            new PeerThread(socket).start();
+            this.communicate(serverThread);
+        } catch (Exception e) {
+            if (socket != null) {
+                socket.close();
+            } else {
+                System.out.println("Failed");
             }
         }
     }
