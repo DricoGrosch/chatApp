@@ -1,3 +1,5 @@
+package model;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,7 +14,7 @@ public class Server {
     private static ExecutorService pool = Executors.newFixedThreadPool(4);
 
     public static void main(String[] args) throws IOException {
-        ServerSocket listener = new ServerSocket(9090);
+        ServerSocket listener = new ServerSocket(8000);
         System.out.println("[SERVER] is waiting for client connection");
         while (true) {
             Socket client = listener.accept();

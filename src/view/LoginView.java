@@ -1,9 +1,15 @@
 package view;
 
 
+import model.Client;
+import model.ServerConnection;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 public class LoginView extends JFrame {
     private JPanel mainFrame;
@@ -23,14 +29,16 @@ public class LoginView extends JFrame {
 
     }
 
-    public void clearInputs() {
-
-    }
-
     private void atachlisteners() {
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                LoginView.super.setVisible(false);
+                try {
+                    new ChatView(username.getText(), host.getText(), Integer.parseInt(port.getText())).setVisible(true);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
             }
         });
         cancelButton.addActionListener(new ActionListener() {
@@ -42,5 +50,4 @@ public class LoginView extends JFrame {
             }
         });
     }
-
 }
