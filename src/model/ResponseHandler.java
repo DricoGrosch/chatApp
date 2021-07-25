@@ -21,6 +21,10 @@ public class ResponseHandler implements Runnable {
         this.out = new PrintWriter(this.client.getOutputStream(), true);
     }
 
+    public Socket getClient() {
+        return client;
+    }
+
     @Override
     public void run() {
         try {
@@ -43,7 +47,9 @@ public class ResponseHandler implements Runnable {
 
     private void outToAll(String message) {
         for (ResponseHandler responseHandler : this.clients) {
-            responseHandler.out.println(message);
+            if (responseHandler.getClient().hashCode() != this.getClient().hashCode()) {
+                responseHandler.out.println(message);
+            }
         }
     }
 }

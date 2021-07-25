@@ -56,7 +56,10 @@ public class ChatView extends JFrame {
     private void sendMessage() {
         String message = messageInput.getText();
         messageInput.setText("");
-        out.println("[" + this.client.getName() + "] " + message);
+        if (!message.trim().equals("")) {
+            this.getMessages().setText(this.getMessages().getText() + "\n" + "                                                                                          " + message);
+            out.println("[" + this.client.getName() + "] " + message);
+        }
     }
 
     private void connect(String host, int port) throws IOException {
