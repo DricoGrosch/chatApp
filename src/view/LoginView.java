@@ -1,15 +1,10 @@
 package view;
 
 
-import model.Client;
-import model.ServerConnection;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
 
 public class LoginView extends JFrame {
     private JPanel mainFrame;

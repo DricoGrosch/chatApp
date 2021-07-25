@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-public class ServerConnection extends Thread {
+public class MessageListener extends Thread {
     private Socket server;
     private BufferedReader in;
     ChatView chat;
 
-    public ServerConnection(Socket server, ChatView chat) throws IOException {
+    public MessageListener(Socket server, ChatView chat) throws IOException {
         this.server = server;
         this.chat = chat;
         this.in = new BufferedReader(new InputStreamReader(this.server.getInputStream()));

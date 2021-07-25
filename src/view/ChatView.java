@@ -1,7 +1,7 @@
 package view;
 
 import model.Client;
-import model.ServerConnection;
+import model.MessageListener;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -17,6 +17,7 @@ public class ChatView extends JFrame {
     private JTextField messageInput;
     private JButton sendMessageBtn;
     private JPanel mainFrame;
+    private JScrollPane scrollPane;
     private Client client;
     PrintWriter out;
 
@@ -30,7 +31,9 @@ public class ChatView extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(this.mainFrame);
         this.setLocationRelativeTo(null);
-        this.setSize(500,500);
+        this.setSize(500, 500);
+        this.scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
 //        this.pack();
         connect(host, port);
         sendMessageBtn.addActionListener(new ActionListener() {
@@ -59,9 +62,9 @@ public class ChatView extends JFrame {
     private void connect(String host, int port) throws IOException {
         Socket socket = null;
         socket = new Socket(host, port);
-        ServerConnection serverConnection = new ServerConnection(socket, this);
+        MessageListener messageListener = new MessageListener(socket, this);
         this.out = new PrintWriter(socket.getOutputStream(), true);
-        serverConnection.start();
+        messageListener.start();
         this.out.println(this.client.getName() + " got in");
     }
 }

@@ -8,13 +8,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 
-public class ClientHandler implements Runnable {
+public class ResponseHandler implements Runnable {
     private Socket client;
     private BufferedReader in;
     private PrintWriter out;
-    private ArrayList<ClientHandler> clients;
+    private ArrayList<ResponseHandler> clients;
 
-    public ClientHandler(Socket client, ArrayList<ClientHandler> clients) throws IOException {
+    public ResponseHandler(Socket client, ArrayList<ResponseHandler> clients) throws IOException {
         this.client = client;
         this.clients = clients;
         this.in = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
@@ -42,8 +42,8 @@ public class ClientHandler implements Runnable {
     }
 
     private void outToAll(String message) {
-        for (ClientHandler clientHandler : this.clients) {
-            clientHandler.out.println(message);
+        for (ResponseHandler responseHandler : this.clients) {
+            responseHandler.out.println(message);
         }
     }
 }
