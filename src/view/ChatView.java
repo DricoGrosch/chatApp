@@ -2,6 +2,7 @@ package view;
 
 import model.Client;
 import model.MessageListener;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -27,22 +28,32 @@ public class ChatView extends JFrame {
 
     public ChatView(String username, String host, int port) throws IOException {
         super("Chat " + username);
-        this.client = new Client(username);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setContentPane(this.mainFrame);
-        this.setLocationRelativeTo(null);
-        this.setSize(500, 500);
-        this.scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        try {
+            this.client = new Client(username);
+            this.connect(host, port);
+            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            this.setContentPane(this.mainFrame);
+            this.setLocationRelativeTo(null);
+            this.setSize(500, 500);
+            this.setResizable(false);
+            this.scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+            this.atachListeners();
+            this.setVisible(true);
+        } catch (Exception e) {
+            int res = JOptionPane.showOptionDialog(this, "Could not connect to server", "Server error", JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.ERROR_MESSAGE, null, null, null);
+            new LoginView().setVisible(true);
+        }
+    }
 
-//        this.pack();
-        connect(host, port);
-        sendMessageBtn.addActionListener(new ActionListener() {
+    private void atachListeners() {
+        this.sendMessageBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 sendMessage();
             }
         });
-        messageInput.addKeyListener(new KeyAdapter() {
+        this.messageInput.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent keyEvent) {
                 super.keyPressed(keyEvent);
@@ -57,8 +68,11 @@ public class ChatView extends JFrame {
         String message = messageInput.getText();
         messageInput.setText("");
         if (!message.trim().equals("")) {
-            this.getMessages().setText(this.getMessages().getText() + "\n" + "                                                                                          " + message);
-            out.println("[" + this.client.getName() + "] " + message);
+            this.getMessages().setText(this.getMessages().getText() + "\n" + "[me] " + message);
+            JSONObject json = new JSONObject();
+            json.put("name", this.client.getName());
+            json.put("message", message);
+            this.out.println(json.toString());
         }
     }
 
@@ -68,7 +82,10 @@ public class ChatView extends JFrame {
         MessageListener messageListener = new MessageListener(socket, this);
         this.out = new PrintWriter(socket.getOutputStream(), true);
         messageListener.start();
-        this.out.println(this.client.getName() + " got in");
+        JSONObject json = new JSONObject();
+        json.put("name", this.client.getName());
+        json.put("message", "got in");
+        this.out.println(json.toString());
     }
 }
 

@@ -1,5 +1,6 @@
 package model;
 
+import org.json.JSONObject;
 import view.ChatView;
 
 import java.io.BufferedReader;
@@ -28,7 +29,8 @@ public class MessageListener extends Thread {
                 if (serverResponse == null) {
                     break;
                 }
-                this.chat.getMessages().setText(this.chat.getMessages().getText() + "\n" + serverResponse);
+                JSONObject json = new JSONObject(serverResponse);
+                this.chat.getMessages().setText(this.chat.getMessages().getText() + "\n" + "[" + json.getString("name") + "] " + json.getString("message"));
             }
         } catch (IOException e) {
             e.printStackTrace();

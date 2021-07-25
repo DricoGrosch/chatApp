@@ -24,13 +24,25 @@ public class LoginView extends JFrame {
 
     }
 
+    private boolean validateInputs() {
+        try {
+            Integer.parseInt(port.getText());
+            return !username.getText().equals("") && !host.getText().equals("");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private void atachlisteners() {
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (!validateInputs()) {
+                    return;
+                }
                 LoginView.super.setVisible(false);
                 try {
-                    new ChatView(username.getText(), host.getText(), Integer.parseInt(port.getText())).setVisible(true);
+                    new ChatView(username.getText(), host.getText(), Integer.parseInt(port.getText()));
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
