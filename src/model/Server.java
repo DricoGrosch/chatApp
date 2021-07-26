@@ -13,13 +13,17 @@ public class Server {
     //    o executor é um facilitador na hora de executar as threads dinamicamente
     private static ExecutorService executor = Executors.newFixedThreadPool(4);
 
+    public static ArrayList<ResponseHandler> getClients() {
+        return clients;
+    }
+
     public static void main(String[] args) throws IOException {
         ServerSocket listener = new ServerSocket(8000);
         System.out.println("[SERVER] is waiting for client connection");
         while (true) {
             Socket client = listener.accept();
 //            um cliente se conectou com o servidor
-            ResponseHandler clientThread = new ResponseHandler(client, clients);
+            ResponseHandler clientThread = new ResponseHandler(client);
 //            esse cliente é adicionado na lista de clientes e  depois é executada a thread
             clients.add(clientThread);
             executor.execute(clientThread);

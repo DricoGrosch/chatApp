@@ -26,19 +26,19 @@ public class MessageListener extends Thread {
 //               fica esperando uma responta do servidor para poder printar na tela
                 String serverResponse = null;
                 serverResponse = this.in.readLine();
-                if (serverResponse == null) {
+                if (serverResponse == null || serverResponse.equals("null")) {
                     break;
                 }
                 JSONObject json = new JSONObject(serverResponse);
                 this.chat.getMessages().setText(this.chat.getMessages().getText() + "\n" + "[" + json.getString("name") + "] " + json.getString("message"));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("deu pau");
         } finally {
             try {
                 in.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("deu pau");
             }
         }
     }
