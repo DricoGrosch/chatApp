@@ -29,5 +29,8 @@ OutputStream de cada cliente. Esta Thread criada é adicionada num array estáti
 quais clientes devem receber uma mensagem enviada por outro cliente.
 
 **JSON DA TROCA DE MENSAGENS ENTRE CLIENTES**
-| CHAVE | CONTEÚDO | | ------------------- | ------------------- | | name | nome do cliente que está enviando a mensagem
-| | message | conteúdo enviado pelo cliente através do input de texto na tela do bate papo |
+
+| CHAVE  |  CONTEÚDO  |
+| ------------------- | ------------------- |
+|  name |  Nome do cliente que está enviando a mensagem |
+|  message |  Conteúdo enviado pelo cliente através do input de texto na tela do bate papo |
