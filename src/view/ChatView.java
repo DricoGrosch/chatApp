@@ -1,7 +1,7 @@
 package view;
 
 import model.Client;
-import model.MessageListener;
+import model.ClientServer;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -9,7 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -21,6 +23,8 @@ public class ChatView extends JFrame {
     private JScrollPane scrollPane;
     private Client client;
     PrintWriter out;
+    private int port;
+    private String host;
 
     public JTextArea getMessages() {
         return messages;
@@ -29,8 +33,10 @@ public class ChatView extends JFrame {
     public ChatView(String username, String host, int port) throws IOException {
         super("Chat " + username);
         try {
+            this.port = port;
+            this.host = host;
             this.client = new Client(username);
-            this.connect(host, port);
+            this.connect();
             this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.setContentPane(this.mainFrame);
             this.setLocationRelativeTo(null);
@@ -76,19 +82,17 @@ public class ChatView extends JFrame {
         }
     }
 
-    private void connect(String host, int port) throws IOException {
-        Socket socket = null;
-        socket = new Socket(host, port);
-        MessageListener messageListener = new MessageListener(socket, this);
-        this.out = new PrintWriter(socket.getOutputStream(), true);
-        messageListener.start();
+    private void connect() throws IOException {
+        Socket socket = new Socket(this.host, 8000);
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
         JSONObject json = new JSONObject();
         json.put("name", this.client.getName());
-        json.put("message", "got in");
-        this.out.println(json.toString());
+        json.put("message", "login");
+        out.println(json.toString());
+        String response = in.readLine();
+        ClientServer server = new ClientServer(this.port,this);
+        server.start();
     }
 }
-
-
-//socket.close();
-//System.exit(0);
