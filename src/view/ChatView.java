@@ -2,6 +2,7 @@ package view;
 
 import model.Client;
 import model.ClientServer;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -56,7 +57,11 @@ public class ChatView extends JFrame {
         this.sendMessageBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                sendMessage();
+                try {
+                    sendMessage();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         this.messageInput.addKeyListener(new KeyAdapter() {
@@ -64,35 +69,57 @@ public class ChatView extends JFrame {
             public void keyPressed(KeyEvent keyEvent) {
                 super.keyPressed(keyEvent);
                 if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
-                    sendMessage();
+                    try {
+                        sendMessage();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
     }
 
-    private void sendMessage() {
+    private void sendMessage() throws IOException {
         String message = messageInput.getText();
         messageInput.setText("");
         if (!message.trim().equals("")) {
             this.getMessages().setText(this.getMessages().getText() + "\n" + "[me] " + message);
-            JSONObject json = new JSONObject();
-            json.put("name", this.client.getName());
-            json.put("message", message);
-            this.out.println(json.toString());
+            JSONArray ports = new JSONArray(this.retrieveDataFromServer("getPorts").getString("ports"));
+            for (Object port : ports) {
+                int intPort = Integer.parseInt(port.toString());
+                if (intPort == this.port){
+                    continue;
+                }
+                Socket socket = new Socket(this.host, intPort);
+                JSONObject json = new JSONObject();
+                json.put("name", this.client.getName());
+                json.put("message", message);
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                out.println(json.toString());
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                in.readLine();
+                socket.close();
+                out.close();
+            }
         }
     }
 
-    private void connect() throws IOException {
+    public JSONObject retrieveDataFromServer(String message) throws IOException {
         Socket socket = new Socket(this.host, 8000);
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
         JSONObject json = new JSONObject();
         json.put("name", this.client.getName());
-        json.put("message", "login");
+        json.put("message", message);
         out.println(json.toString());
-        String response = in.readLine();
-        ClientServer server = new ClientServer(this.port,this);
+        JSONObject response = new JSONObject(in.readLine());
+        return response;
+    }
+
+    private void connect() throws IOException {
+        this.retrieveDataFromServer(this.port + "");
+        ClientServer server = new ClientServer(this.port, this);
         server.start();
     }
 }

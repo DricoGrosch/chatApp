@@ -27,7 +27,9 @@ public class Server {
             JSONObject request = new JSONObject(in.readLine());
             JSONObject response = new JSONObject();
             if (request.getString("message").equals("getPorts")) {
-                response.put("ports", ports.toString());
+                JSONArray array = new JSONArray(ports);
+                String a = array.toString().toString();
+                response.put("ports",a );
             } else {
                 ports.add(request.getString("message"));
                 response.put("ok", true);

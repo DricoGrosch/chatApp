@@ -33,7 +33,6 @@ public class ClientServer extends Thread {
                 Socket client = server.accept();
                 this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-                out.println("{connected:true}");
                 String clientMessage = this.in.readLine();
                 if (clientMessage == null || clientMessage.equals("null")) {
                     break;
