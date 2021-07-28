@@ -28,6 +28,14 @@ Thread para despachar uma mensagem de um cliente para outros clientes através d
 OutputStream de cada cliente. Esta Thread criada é adicionada num array estático na classe do servidor, para assim saber
 quais clientes devem receber uma mensagem enviada por outro cliente.
 
+**REQUISITOS FUNCIONAIS**
+
+ RF1: O Sistema deve permitir conexão com o server socket
+
+ RF3: O sistema deve permitir a troca de mensagens entre varios usuários.
+ 
+ RF3: O sistema deve manters mensagens digitas pelos usuários enquanto o aplicativo estiver aberto.
+
 **JSON DA TROCA DE MENSAGENS ENTRE CLIENTES**
 
 | CHAVE  |  CONTEÚDO  |
