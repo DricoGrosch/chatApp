@@ -42,3 +42,5 @@ quais clientes devem receber uma mensagem enviada por outro cliente.
 | ------------------- | ------------------- |
 |  name |  Nome do cliente que está enviando a mensagem |
 |  message |  Conteúdo enviado pelo cliente através do input de texto na tela do bate papo |
+
+![Diagrama em branco](DIAGRAMA%20DE%20SEQUENCIA.png)
