@@ -10,15 +10,13 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Server {
-    //    uma lista com todas as threas dos clientes. assim o servidor sabe pra quem tem que encaminhar as mensagens as mensagens
+    public static final int PORT = 8000;
     private static ArrayList<String> ports = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
-        ServerSocket listener = new ServerSocket(8000);
+        ServerSocket listener = new ServerSocket(Server.PORT);
         System.out.println("[SERVER] is waiting for client connection");
         while (true) {
             Socket client = listener.accept();

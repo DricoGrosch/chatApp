@@ -1,6 +1,7 @@
 package view;
 
 import model.Client;
+import model.ClientController;
 import model.ClientServer;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,10 +23,7 @@ public class ChatView extends JFrame {
     private JButton sendMessageBtn;
     private JPanel mainFrame;
     private JScrollPane scrollPane;
-    private Client client;
-    PrintWriter out;
-    private int port;
-    private String host;
+    private ClientController clientController;
 
     public JTextArea getMessages() {
         return messages;
@@ -34,10 +32,8 @@ public class ChatView extends JFrame {
     public ChatView(String username, String host, int port) throws IOException {
         super("Chat " + username);
         try {
-            this.port = port;
-            this.host = host;
-            this.client = new Client(username);
-            this.connect();
+            this.clientController = new ClientController(new Client(username, port, host),this);
+            this.clientController.connect();
             this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.setContentPane(this.mainFrame);
             this.setLocationRelativeTo(null);
@@ -58,7 +54,12 @@ public class ChatView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    sendMessage();
+                    String message = messageInput.getText();
+                    messageInput.setText("");
+                    if (!message.trim().equals("")) {
+                        getMessages().setText(getMessages().getText() + "\n" + "[me] " + message);
+                        clientController.sendMessage(message);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -70,56 +71,17 @@ public class ChatView extends JFrame {
                 super.keyPressed(keyEvent);
                 if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
                     try {
-                        sendMessage();
+                        String message = messageInput.getText();
+                        messageInput.setText("");
+                        if (!message.trim().equals("")) {
+                            getMessages().setText(getMessages().getText() + "\n" + "[me] " + message);
+                            clientController.sendMessage(message);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
         });
-    }
-
-    private void sendMessage() throws IOException {
-        String message = messageInput.getText();
-        messageInput.setText("");
-        if (!message.trim().equals("")) {
-            this.getMessages().setText(this.getMessages().getText() + "\n" + "[me] " + message);
-            JSONArray ports = new JSONArray(this.retrieveDataFromServer("getPorts").getString("ports"));
-            for (Object port : ports) {
-                int intPort = Integer.parseInt(port.toString());
-                if (intPort == this.port){
-                    continue;
-                }
-                Socket socket = new Socket(this.host, intPort);
-                JSONObject json = new JSONObject();
-                json.put("name", this.client.getName());
-                json.put("message", message);
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                out.println(json.toString());
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                in.readLine();
-                socket.close();
-                out.close();
-            }
-        }
-    }
-
-    public JSONObject retrieveDataFromServer(String message) throws IOException {
-        Socket socket = new Socket(this.host, 8000);
-        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-        JSONObject json = new JSONObject();
-        json.put("name", this.client.getName());
-        json.put("message", message);
-        out.println(json.toString());
-        JSONObject response = new JSONObject(in.readLine());
-        return response;
-    }
-
-    private void connect() throws IOException {
-        this.retrieveDataFromServer(this.port + "");
-        ClientServer server = new ClientServer(this.port, this);
-        server.start();
     }
 }
