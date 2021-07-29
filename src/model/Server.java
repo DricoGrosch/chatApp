@@ -28,11 +28,10 @@ public class Server {
             JSONObject response = new JSONObject();
             if (request.getString("message").equals("getPorts")) {
                 JSONArray array = new JSONArray(ports);
-                String a = array.toString().toString();
-                response.put("ports",a );
+                response.put("ports", array.toString().toString());
             } else {
                 ports.add(request.getString("message"));
-                response.put("ok", true);
+                response.put("authenticated", true);
             }
             out.println(response.toString());
         }
