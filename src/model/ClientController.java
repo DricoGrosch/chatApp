@@ -54,7 +54,7 @@ public class ClientController {
 
     public void connect() throws IOException {
         this.retrieveDataFromServer(this.client.getPort() + "");
-        ClientServer server = new ClientServer(this.client.getPort(), this.view);
+        ClientServer server = new ClientServer(this.client, this.view);
         server.start();
     }
 

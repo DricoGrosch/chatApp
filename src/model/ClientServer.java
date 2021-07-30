@@ -11,12 +11,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ClientServer extends Thread {
-    private final ChatView view;
-    private int port;
+    private ChatView view;
+    private Client client;
     private BufferedReader in;
 
-    public ClientServer(int port, ChatView view) {
-        this.port = port;
+    public ClientServer(Client client, ChatView view) {
+        this.client = client;
         this.view = view;
     }
 
@@ -24,7 +24,7 @@ public class ClientServer extends Thread {
     public void run() {
         ServerSocket server = null;
         try {
-            server = new ServerSocket(this.port);
+            server = new ServerSocket(this.client.getPort());
         } catch (IOException e) {
             e.printStackTrace();
         }
