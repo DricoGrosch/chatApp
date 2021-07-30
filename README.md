@@ -30,17 +30,24 @@ quais clientes devem receber uma mensagem enviada por outro cliente.
 
 **REQUISITOS FUNCIONAIS**
 
- RF1: O Sistema deve permitir conexão com o server socket
+RF1: O Sistema deve permitir conexão com o server socket
 
- RF3: O sistema deve permitir a troca de mensagens entre varios usuários.
- 
- RF3: O sistema deve manters mensagens digitas pelos usuários enquanto o aplicativo estiver aberto.
+RF3: O sistema deve permitir a troca de mensagens entre varios usuários.
 
-**JSON DA TROCA DE MENSAGENS ENTRE CLIENTES**
+RF3: O sistema deve manters mensagens digitas pelos usuários enquanto o aplicativo estiver aberto.
 
-| CHAVE  |  CONTEÚDO  |
-| ------------------- | ------------------- |
-|  name |  Nome do cliente que está enviando a mensagem |
-|  message |  Conteúdo enviado pelo cliente através do input de texto na tela do bate papo |
+**JSON DA TROCA DE MENSAGENS ENTRE CLIENTE E SERVIDOR**
+
+| name  |  message  | descrição
+| ------------------- | ------------------- | ------------------- |
+|  nome do cliente |  getPorts | faz a requisição de todas as portas dos clientes logados|
+|  nome do cliente |  porta do cliente logado | envia a porta do cliente que logou para salvar no array de portas |
+
+**JSON DA TROCA DE MENSAGENS ENTRE CLIENTE E CLIENTE**
+
+| name  |  message  | descrição
+| ------------------- | ------------------- | ------------------- |
+|  nome do cliente |  mensagem | mensagem digitada pelo cliente a ser enviada a outros clientes|
+
 
 ![Diagrama em branco](DIAGRAMA%20DE%20SEQUENCIA.png)
