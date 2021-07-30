@@ -42,6 +42,18 @@ RF3: O sistema deve manters mensagens digitas pelos usuários enquanto o aplicat
 | ------------------- | ------------------- | ------------------- |
 |  nome do cliente |  getPorts | faz a requisição de todas as portas dos clientes logados|
 |  nome do cliente |  porta do cliente logado | envia a porta do cliente que logou para salvar no array de portas |
+**DIAGRAMA DE SEQUENCIA DAS MENSAGENS DE LOGIN**
+
+![Diagrama em branco](loginDiagram.png)
+
+**DIAGRAMA DE SEQUENCIA DAS MENSAGENS DE REQUISIÇÃO DE PORTAS**
+
+![Diagrama em branco](getPortsDiagram.png)
+
+**DIAGRAMA DE SEQUENCIA DAS MENSAGENS ENTRE CLIENTES**
+
+![Diagrama em branco](SendMessageDiagram.png)
+
 
 **JSON DA TROCA DE MENSAGENS ENTRE CLIENTE E CLIENTE**
 
@@ -50,4 +62,3 @@ RF3: O sistema deve manters mensagens digitas pelos usuários enquanto o aplicat
 |  nome do cliente |  mensagem | mensagem digitada pelo cliente a ser enviada a outros clientes|
 
 
-![Diagrama em branco](DIAGRAMA%20DE%20SEQUENCIA.png)
