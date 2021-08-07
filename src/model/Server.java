@@ -1,6 +1,6 @@
 package model;
 
-import com.google.gson.JsonObject;
+import controller.ServerPingCountdown;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -10,15 +10,16 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class Server {
     public static final int PORT = 8000;
-    private static JSONArray clients = new JSONArray();
+    public static JSONArray clients = new JSONArray();
 
-    public static void main(String[] args) throws IOException {
+    public void start() throws IOException {
         ServerSocket listener = new ServerSocket(Server.PORT);
         System.out.println("[SERVER] is waiting for client connection");
+        new ServerPingCountdown(listener, new JSONObject()).start();
+
         while (true) {
             Socket client = listener.accept();
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -31,9 +32,13 @@ public class Server {
                 JSONObject clientData = new JSONObject(request.getString("message"));
                 clients.put(clientData);
                 response.put("authenticated", true);
+                new ServerPingCountdown(listener, clientData).start();
             }
             out.println(response.toString());
         }
+    }
 
+    public static void main(String[] args) throws IOException {
+        new Server().start();
     }
 }

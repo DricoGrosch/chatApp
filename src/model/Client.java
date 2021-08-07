@@ -5,6 +5,24 @@ public class Client {
     private int privatePort;
     private int publicPort;
     private String host;
+    private String serverHost;
+    private int serverPort;
+
+    public String getServerHost() {
+        return serverHost;
+    }
+
+    public void setServerHost(String serverHost) {
+        this.serverHost = serverHost;
+    }
+
+    public int getServerPort() {
+        return serverPort;
+    }
+
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
+    }
 
     public String getName() {
         return name;
