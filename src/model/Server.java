@@ -1,5 +1,6 @@
 package model;
 
+import com.google.gson.JsonObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 
 public class Server {
     public static final int PORT = 8000;
-    private static ArrayList<String> ports = new ArrayList<>();
+    private static JSONArray clients = new JSONArray();
 
     public static void main(String[] args) throws IOException {
         ServerSocket listener = new ServerSocket(Server.PORT);
@@ -24,11 +25,11 @@ public class Server {
             PrintWriter out = new PrintWriter(client.getOutputStream(), true);
             JSONObject request = new JSONObject(in.readLine());
             JSONObject response = new JSONObject();
-            if (request.getString("message").equals("getPorts")) {
-                JSONArray array = new JSONArray(ports);
-                response.put("ports", array.toString().toString());
+            if (request.getString("message").equals("getClients")) {
+                response.put("clients", clients.toString());
             } else {
-                ports.add(request.getString("message"));
+                JSONObject clientData = new JSONObject(request.getString("message"));
+                clients.put(clientData);
                 response.put("authenticated", true);
             }
             out.println(response.toString());

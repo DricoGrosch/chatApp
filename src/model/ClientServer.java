@@ -24,7 +24,7 @@ public class ClientServer extends Thread {
     public void run() {
         ServerSocket server = null;
         try {
-            server = new ServerSocket(this.client.getPort());
+            server = new ServerSocket(this.client.getPrivatePort());
         } catch (IOException e) {
             e.printStackTrace();
         }

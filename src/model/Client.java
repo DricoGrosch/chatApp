@@ -2,8 +2,10 @@ package model;
 
 public class Client {
     private String name;
-  private int port;
+    private int privatePort;
+    private int publicPort;
     private String host;
+
     public String getName() {
         return name;
     }
@@ -12,26 +14,34 @@ public class Client {
         this.name = name;
     }
 
-    public int getPort() {
-        return port;
+    public int getPrivatePort() {
+        return privatePort;
     }
 
-    public void setPort(int port) {
-        this.port = port;
+    public void setPrivatePort(int privatePort) {
+        this.privatePort = privatePort;
     }
 
-    public String getHost() {
-        return host;
+    public int getPublicPort() {
+        return publicPort;
+    }
+
+    public void setPublicPort(int publicPort) {
+        this.publicPort = publicPort;
     }
 
     public void setHost(String host) {
         this.host = host;
     }
 
+    public String getHost() {
+        return host;
+    }
 
-    public Client(String name, int port, String host) {
+    public Client(String name, int privatePort, int publicPort, String host) {
         this.name = name;
-        this.port = port;
+        this.privatePort = privatePort;
+        this.publicPort = publicPort;
         this.host = host;
     }
 }

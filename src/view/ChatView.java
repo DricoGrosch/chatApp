@@ -1,21 +1,14 @@
 package view;
 
 import model.Client;
-import model.ClientController;
-import model.ClientServer;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import controller.ClientController;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 
 public class ChatView extends JFrame {
     private JTextArea messages;
@@ -25,14 +18,15 @@ public class ChatView extends JFrame {
     private JScrollPane scrollPane;
     private ClientController clientController;
 
+
     public JTextArea getMessages() {
         return messages;
     }
 
-    public ChatView(String username, String host, int port) throws IOException {
+    public ChatView(String username, String serverHost, int serverPort, String host, int privatePort, int publicPort) throws IOException {
         super("Chat " + username);
         try {
-            this.clientController = new ClientController(new Client(username, port, host),this);
+            this.clientController = new ClientController(new Client(username, privatePort, publicPort, host), serverHost, serverPort, this);
             this.clientController.connect();
             this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.setContentPane(this.mainFrame);

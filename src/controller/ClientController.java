@@ -1,5 +1,8 @@
-package model;
+package controller;
 
+import model.Client;
+import model.ClientServer;
+import model.Server;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import view.ChatView;
@@ -13,20 +16,41 @@ import java.net.Socket;
 public class ClientController {
     private final ChatView view;
     private Client client;
+    private String serverHost;
+    private int serverPort;
 
-    public ClientController(Client client, ChatView view) {
+    public String getServerHost() {
+        return serverHost;
+    }
+
+    public void setServerHost(String serverHost) {
+        this.serverHost = serverHost;
+    }
+
+    public int getServerPort() {
+        return serverPort;
+    }
+
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
+    }
+
+    public ClientController(Client client, String serverHost, int serverPort, ChatView view) {
         this.client = client;
         this.view = view;
+        this.serverHost = serverHost;
+        this.serverPort = serverPort;
     }
 
     public void sendMessage(String message) throws IOException {
-        JSONArray ports = new JSONArray(this.retrieveDataFromServer("getPorts").getString("ports"));
-        for (Object port : ports) {
-            int intPort = Integer.parseInt(port.toString());
-            if (intPort == this.client.getPort()) {
+        JSONArray clients = new JSONArray(this.retrieveDataFromServer("getClients").getString("clients"));
+        for (int i = 0; i < clients.length(); i++) {
+            JSONObject client = clients.getJSONObject(i);
+            int port = client.getInt("port");
+            if (port == this.client.getPublicPort()) {
                 continue;
             }
-            Socket socket = new Socket(this.client.getHost(), intPort);
+            Socket socket = new Socket(client.getString("host"), port);
             JSONObject json = new JSONObject();
             json.put("name", this.client.getName());
             json.put("message", message);
@@ -40,12 +64,12 @@ public class ClientController {
     }
 
     public JSONObject retrieveDataFromServer(String message) throws IOException {
-        Socket socket = new Socket(this.client.getHost(), Server.PORT);
+        Socket socket = new Socket(this.getServerHost(), this.getServerPort());
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
         JSONObject json = new JSONObject();
-        json.put("name", this.client.getName());
+        json.put("name", "connect");
         json.put("message", message);
         out.println(json.toString());
         JSONObject response = new JSONObject(in.readLine());
@@ -53,7 +77,10 @@ public class ClientController {
     }
 
     public void connect() throws IOException {
-        this.retrieveDataFromServer(this.client.getPort() + "");
+        JSONObject json = new JSONObject();
+        json.put("host", this.client.getHost());
+        json.put("port", this.client.getPublicPort());
+        this.retrieveDataFromServer(json.toString());
         ClientServer server = new ClientServer(this.client, this.view);
         server.start();
     }

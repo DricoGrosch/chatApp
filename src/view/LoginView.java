@@ -10,9 +10,12 @@ public class LoginView extends JFrame {
     private JPanel mainFrame;
     private JTextField username;
     private JButton cancelButton;
-    private JTextField port;
-    private JTextField host;
+    private JTextField serverPort;
+    private JTextField serverHost;
     private JButton submitButton;
+    private JTextField host;
+    private JTextField publicPort;
+    private JTextField privatePort;
 
     public LoginView() {
         super("Login");
@@ -26,8 +29,10 @@ public class LoginView extends JFrame {
 
     private boolean validateInputs() {
         try {
-            Integer.parseInt(port.getText());
-            return !username.getText().equals("") && !host.getText().equals("");
+            Integer.parseInt(serverPort.getText());
+            Integer.parseInt(publicPort.getText());
+            Integer.parseInt(privatePort.getText());
+            return !username.getText().equals("") && !serverHost.getText().equals("") && !host.getText().equals("");
         } catch (Exception e) {
             return false;
         }
@@ -42,7 +47,7 @@ public class LoginView extends JFrame {
                 }
                 LoginView.super.setVisible(false);
                 try {
-                    new ChatView(username.getText(), host.getText(), Integer.parseInt(port.getText()));
+                    new ChatView(username.getText(), serverHost.getText(), Integer.parseInt(serverPort.getText()), host.getText(), Integer.parseInt(privatePort.getText()), Integer.parseInt(publicPort.getText()));
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -52,8 +57,8 @@ public class LoginView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 username.setText("");
-                port.setText("");
-                host.setText("");
+                serverPort.setText("");
+                serverHost.setText("");
             }
         });
     }
