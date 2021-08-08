@@ -43,7 +43,9 @@ public class ClientController {
     }
 
     public void sendMessage(String message) throws IOException {
-        JSONArray clients = new JSONArray(this.retrieveDataFromServer("getClients").getString("clients"));
+        JSONObject request = new JSONObject();
+        request.put("name", "getClients");
+        JSONArray clients = new JSONArray(this.retrieveDataFromServer(request).getString("clients"));
         for (int i = 0; i < clients.length(); i++) {
             JSONObject client = clients.getJSONObject(i);
             int port = client.getInt("port");
@@ -63,26 +65,24 @@ public class ClientController {
         }
     }
 
-    public JSONObject retrieveDataFromServer(String message) throws IOException {
+    public JSONObject retrieveDataFromServer(JSONObject json) throws IOException {
         Socket socket = new Socket(this.getServerHost(), this.getServerPort());
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-        JSONObject json = new JSONObject();
-        json.put("name", "connect");
-        json.put("message", message);
         out.println(json.toString());
         JSONObject response = new JSONObject(in.readLine());
         return response;
     }
 
     public void connect() throws IOException {
-        JSONObject json = new JSONObject();
-        json.put("host", this.client.getHost());
-        json.put("port", this.client.getPublicPort());
-        this.retrieveDataFromServer(json.toString());
+
+        JSONObject request = new JSONObject();
+        request.put("name", "connect");
+        request.put("message", this.client.toJson());
+        this.retrieveDataFromServer(request);
         ClientServer server = new ClientServer(this.client, this.view);
         server.start();
+        new ClientPingController(this.client).start();
     }
 
     public Client getClient() {

@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 public class Client {
     private String name;
     private int privatePort;
@@ -56,10 +58,19 @@ public class Client {
         return host;
     }
 
-    public Client(String name, int privatePort, int publicPort, String host) {
+    public Client(String name, int privatePort, int publicPort, String host, String serverHost, int serverPort) {
         this.name = name;
         this.privatePort = privatePort;
         this.publicPort = publicPort;
         this.host = host;
+        this.serverHost = serverHost;
+        this.serverPort = serverPort;
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("host", this.getHost());
+        json.put("port", this.getPublicPort());
+        return json;
     }
 }

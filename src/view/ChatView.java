@@ -26,7 +26,7 @@ public class ChatView extends JFrame {
     public ChatView(String username, String serverHost, int serverPort, String host, int privatePort, int publicPort) throws IOException {
         super("Chat " + username);
         try {
-            this.clientController = new ClientController(new Client(username, privatePort, publicPort, host), serverHost, serverPort, this);
+            this.clientController = new ClientController(new Client(username, privatePort, publicPort, host, serverHost, serverPort), serverHost, serverPort, this);
             this.clientController.connect();
             this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.setContentPane(this.mainFrame);

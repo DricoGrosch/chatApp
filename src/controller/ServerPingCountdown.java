@@ -3,31 +3,31 @@ package controller;
 import model.Server;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-import java.util.concurrent.ScheduledExecutorService;
-
 public class ServerPingCountdown extends Thread {
-    private static int countdown = 10;
-    private static Timer timer;
-    private ServerSocket listener;
     private JSONObject client;
-    int countdownStarter = 5;
+    int countdownStarter = 3;
 
-    public ServerPingCountdown(ServerSocket listener, JSONObject client) {
-        this.listener = listener;
+    public JSONObject getClient() {
+        return client;
+    }
+
+    public ServerPingCountdown(JSONObject client) {
         this.client = client;
     }
 
     public void removeClient() {
+        for (int i = 0; i < Server.clients.length(); i++) {
+            if (Server.clients.getJSONObject(i) == this.client) {
+                Server.clients.remove(i);
+            }
 
+        }
     }
 
     @Override
@@ -35,13 +35,6 @@ public class ServerPingCountdown extends Thread {
         final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         final Runnable runnable = new Runnable() {
             public void run() {
-                new Thread(() -> {
-                    try {
-                        listener.accept();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
                 System.out.println(countdownStarter);
                 countdownStarter--;
                 if (countdownStarter < 0) {
@@ -52,5 +45,10 @@ public class ServerPingCountdown extends Thread {
             }
         };
         scheduler.scheduleAtFixedRate(runnable, 0, 1, SECONDS);
+    }
+
+    public void resetTimer() {
+        countdownStarter = 3;
+
     }
 }
