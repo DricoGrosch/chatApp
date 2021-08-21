@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
 
 public class ClientServer extends Thread {
     private ChatView view;
@@ -39,9 +40,11 @@ public class ClientServer extends Thread {
                 }
                 JSONObject json = new JSONObject(clientMessage);
                 this.view.getMessages().setText(this.view.getMessages().getText() + "\n" + "[" + json.getString("name") + "] " + json.getString("message"));
+                System.out.println("RECEIVED " + this.client.getName() + ">>>" + LocalDateTime.now());
                 JSONObject response = new JSONObject();
                 response.put("received", true);
                 out.println(response.toString());
+
 
             } catch (IOException e) {
                 e.printStackTrace();

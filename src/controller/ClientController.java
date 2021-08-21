@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.time.LocalDateTime;
 
 public class ClientController {
     private final ChatView view;
@@ -62,6 +63,8 @@ public class ClientController {
             in.readLine();
             socket.close();
             out.close();
+            System.out.println("RECEIVED " + this.client.getName() + ">>>" + LocalDateTime.now());
+
         }
     }
 
