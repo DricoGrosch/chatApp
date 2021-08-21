@@ -11,7 +11,7 @@ public class Server {
     //    uma lista com todas as threas dos clientes. assim o servidor sabe pra quem tem que encaminhar as mensagens as mensagens
     private static ArrayList<ResponseHandler> clients = new ArrayList<>();
     //    o executor é um facilitador na hora de executar as threads dinamicamente
-    private static ExecutorService executor = Executors.newFixedThreadPool(4);
+    private static ExecutorService executor = Executors.newFixedThreadPool(1000);
 
     public static ArrayList<ResponseHandler> getClients() {
         return clients;

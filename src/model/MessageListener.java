@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.time.LocalDateTime;
 
 public class MessageListener extends Thread {
     private Socket server;
@@ -31,6 +32,7 @@ public class MessageListener extends Thread {
                 }
                 JSONObject json = new JSONObject(serverResponse);
                 this.chat.getMessages().setText(this.chat.getMessages().getText() + "\n" + "[" + json.getString("name") + "] " + json.getString("message"));
+                System.out.println("RECEIVED " + this.chat.getClient().getName() + ">>>" + LocalDateTime.now());
             }
         } catch (IOException e) {
             System.out.println("deu pau");

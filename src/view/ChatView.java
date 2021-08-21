@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.time.LocalDateTime;
 
 public class ChatView extends JFrame {
     private JTextArea messages;
@@ -21,6 +22,10 @@ public class ChatView extends JFrame {
     private JScrollPane scrollPane;
     private Client client;
     PrintWriter out;
+
+    public Client getClient() {
+        return client;
+    }
 
     public JTextArea getMessages() {
         return messages;
@@ -38,7 +43,7 @@ public class ChatView extends JFrame {
             this.setResizable(false);
             this.scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
             this.atachListeners();
-            this.setVisible(true);
+//            this.setVisible(true);
         } catch (Exception e) {
             int res = JOptionPane.showOptionDialog(this, "Could not connect to server", "Server error", JOptionPane.DEFAULT_OPTION,
                     JOptionPane.ERROR_MESSAGE, null, null, null);
@@ -65,6 +70,7 @@ public class ChatView extends JFrame {
     }
 
     private void sendMessage() {
+        System.out.println("SEND >>>" + LocalDateTime.now());
         String message = messageInput.getText();
         messageInput.setText("");
         if (!message.trim().equals("")) {
