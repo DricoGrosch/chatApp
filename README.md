@@ -8,25 +8,14 @@
 ## Cenário Base
 
 O sistema consiste numa sala de bate papo peer to peer através de sockets em conjunto com threads. Para entrar na sala,
-cada cliente deve informar seu nome de usuário, host e porta de onde está hospedado o servidor, para que o mesmo aceite
-a conexão do socket, disparando um aviso "Cliente entrou" para todos os já conectados. Cada cliente logado pode enviar
-mensagens a todos os participantes. Tal comunicação acontece através de JSONs com a chave "name" e "message", sendo
-respectivamente o nome do cliente que está enviando a mensagem e message o conteúdo digitado pelo menos
+cada cliente deve informar sua scredenciais (porta privada, host e porta publica) e os dados do servidor (host e porta)
+, para que o mesmo aceite a conexão do socket. Cada cliente logado pode enviar mensagens a todos os participantes. Tal
+comunicação acontece através de JSONs com a chave "name" e "message", sendo respectivamente o nome do cliente que está
+enviando a mensagem e message o conteúdo digitado pelo menos
+
+**DIAGRAMA DE CLASSE**
 
 ![Diagrama em branco](DiagramaClasse.png)
-
-A manipulação dos dados é realizada a partir de mensagens recebidas do cliente, via Socket. A mensagem é uma String que
-é separada pelo caracter especial ";". Essa String contém, em posições específicas, a operação de manipulação e os dados
-requeridos, conforme esquema abaixo.
-
-A aplicação cliente consiste em uma tela principal, que é a do bate papo, onde para cada novo cliente é instanciada uma
-Thread chamada MessageListener, que monitora através de um BufferedReader as mensagens recebidas pelos outros clientes.
-Tal thread é necessária pois a leitura do Buffered reader interrompe a execução do código até ser recebida uma mensagem,
-logo, fica inviável enviar uma nova mensagem outra mensagem seja lida pelo mesmo cliente.; A aplicação servidor mantém
-os clientes conectados no socket, ou seja, para cada cliente cuja cojnexão do socket foi aceita, será criada também uma
-Thread para despachar uma mensagem de um cliente para outros clientes através de um PrintWriter instanciado a partir do
-OutputStream de cada cliente. Esta Thread criada é adicionada num array estático na classe do servidor, para assim saber
-quais clientes devem receber uma mensagem enviada por outro cliente.
 
 **REQUISITOS FUNCIONAIS**
 
@@ -36,24 +25,37 @@ RF3: O sistema deve permitir a troca de mensagens entre varios usuários.
 
 RF3: O sistema deve manters mensagens digitas pelos usuários enquanto o aplicativo estiver aberto.
 
+RF4: O sistema deve remover o cliente do servidor quando houver uma inatividade de 5 segundos
+
 **JSON DA TROCA DE MENSAGENS ENTRE CLIENTE E SERVIDOR**
 
 | name  |  message  | descrição
 | ------------------- | ------------------- | ------------------- |
-|  nome do cliente |  getClients | faz a requisição de todas as portas dos clientes logados|
-|  nome do cliente |  porta do cliente logado | envia a porta do cliente que logou para salvar no array de portas |
+|  getClients |  getClients | faz a requisição do todos os clientes clientes logados|
+|  connect |  {'host','port'} | envia o host e a porta do cliente que logou para salvar no array de portas |
+|  ping |  {'host','port'} |  envia o host e a porta do cliente para resetar a contagem de logout |
+
+**JSON DA TROCA DE MENSAGENS ENTRE CLIENTE E SERVIDOR**
+
+| name  |  message  | descrição
+| ------------------- | ------------------- | ------------------- |
+|  nome do cliente |  mensagem | mensagem enviada pelo cliente |
+
 **DIAGRAMA DE SEQUENCIA DAS MENSAGENS DE LOGIN**
 
-![Diagrama em branco](loginDiagram.png)
+![Diagrama em branco](diagramaConnect.png)
 
-**DIAGRAMA DE SEQUENCIA DAS MENSAGENS DE REQUISIÇÃO DE PORTAS**
+**DIAGRAMA DE SEQUENCIA DAS MENSAGENS DE REQUISIÇÃO DE CLIENTES**
 
-![Diagrama em branco](getPortsDiagram.png)
+![Diagrama em branco](diagramaGetClients.png)
+
+**DIAGRAMA DE SEQUENCIA DAS MENSAGENS DO PING**
+
+![Diagrama em branco](diagramaPing.png)
 
 **DIAGRAMA DE SEQUENCIA DAS MENSAGENS ENTRE CLIENTES**
 
-![Diagrama em branco](SendMessageDiagram.png)
-
+![Diagrama em branco](diagramaMensagem.png)
 
 **JSON DA TROCA DE MENSAGENS ENTRE CLIENTE E CLIENTE**
 
