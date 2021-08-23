@@ -11,7 +11,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class ServerPingCountdown extends Thread {
     private JSONObject client;
-    int countdownStarter = 3;
+    int countdownStarter = 5;
 
     public JSONObject getClient() {
         return client;
@@ -48,7 +48,7 @@ public class ServerPingCountdown extends Thread {
     }
 
     public void resetTimer() {
-        countdownStarter = 3;
+        countdownStarter = 5;
 
     }
 }
