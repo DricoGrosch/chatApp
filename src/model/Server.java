@@ -15,9 +15,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-    public static final int PORT = 8000;
+    public static final int PORT = 8001;
     public static JSONArray clients = new JSONArray();
-    private static ExecutorService executor = Executors.newFixedThreadPool(4);
+    private static ExecutorService executor = Executors.newFixedThreadPool(20);
     private ArrayList<ServerPingCountdown> pings = new ArrayList<>();
 
     public JSONObject getCLients() {
